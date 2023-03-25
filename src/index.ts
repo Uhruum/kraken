@@ -4,6 +4,7 @@ import express from 'express';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import container from "./inversify.config";
 import './presentation/EmscController';
+import './presentation/ReverseGeocodingServiceController';
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 const swaggerDocument = require("./public/swagger.json");
@@ -16,7 +17,7 @@ const app = express();
 let server =  new InversifyExpressServer(container, null, { rootPath: "/api" }, app);
 server.setConfig((app) => {
   app.use(express.json());
-  app.use(morgan("combined"));
+  app.use(morgan(`${ process.env.MorganFormat }`));
   app.use(express.static("/src/public"));
   app.use(
     "/api/docs",

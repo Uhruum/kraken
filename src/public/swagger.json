@@ -36,6 +36,36 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"LocationDto": {
+				"properties": {
+					"latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"city": {
+						"type": "string"
+					},
+					"country": {
+						"type": "string"
+					},
+					"countryCode": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"latitude",
+					"longitude",
+					"city",
+					"country",
+					"countryCode"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -64,8 +94,52 @@
 						}
 					}
 				},
+				"tags": [
+					"Earthquake Api Service"
+				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/api/reverseGeocoding/locationInfo/{longitude}/{latitude}": {
+			"get": {
+				"operationId": "GetLocationInfo",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LocationDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Reverse Geocoding Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "longitude",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "path",
+						"name": "latitude",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		}
 	},
