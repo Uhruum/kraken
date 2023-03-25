@@ -1,7 +1,7 @@
 import TYPES from './types';
 import {Container} from 'inversify';
-import { EarthquakeApiService } from './emsc/implementations/EarthquakeApiService';
-import { IEarthquakeApiService } from './emsc/abstractions/IEarthquakeApiService';
+import { EarthquakeApiService } from './services/emsc/implementations/EarthquakeApiService';
+import { IEarthquakeApiService } from './services/emsc/abstractions/IEarthquakeApiService';
 
 let container = new Container();
 
