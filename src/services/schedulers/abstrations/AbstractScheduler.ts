@@ -15,15 +15,6 @@ export abstract class AbstractScheduler implements IScheduler {
     private initiateScheduler() {
         console.log(`Info: initiate scheduler with name: ${this._name}`);
         this.task = new CronJob(this._scheduleTime, this.executeScheduler);
-        // Start job
-        if (!this.task.running) {
-            this.task.start();
-            console.log(`Info: scheduler started with cron expression: ${this._scheduleTime} and name: ${this._name}`);
-
-        } else {
-            console.log(`Info: scheduler already running with cron expression: ${this._scheduleTime} and name: ${this._name}`);
-        }
-
     }
 
     abstract executeScheduler(): Promise<void>;
@@ -31,4 +22,24 @@ export abstract class AbstractScheduler implements IScheduler {
     abstract getCroneExpression(): string;
 
     abstract getSchedulerName(): string;
+
+    async startScheduler(): Promise<void> {
+        if (!this.task.running) {
+            this.task.start();
+            console.log(`Info: scheduler started with cron expression: ${this._scheduleTime} and name: ${this._name}`);
+
+        } else {
+            console.log(`Info: scheduler already running with cron expression: ${this._scheduleTime} and name: ${this._name}`);
+        }
+    }
+
+    async stopScheduler(): Promise<void> {
+        if (this.task.running) {
+            this.task.stop();
+            console.log(`Info: scheduler stopped with cron expression: ${this._scheduleTime} and name: ${this._name}`);
+
+        } else {
+            console.log(`Info: scheduler already stopped with cron expression: ${this._scheduleTime} and name: ${this._name}`);
+        }
+    }
 }

@@ -50,4 +50,5 @@ appConfigured.listen(port || 9000, () => console.log("Server is running on port"
 
 if(process.env.RunTestScheduler){
     const scheduler = new TestScheduler();
+    scheduler.startScheduler();
 }
