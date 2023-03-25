@@ -4,36 +4,36 @@ import {IScheduler} from "./IScheduler";
 export abstract class AbstractScheduler implements IScheduler{
     private readonly _scheduleTime: string;
     private readonly _name: string;
-    private task: any;
+    private task: cron.ScheduledTask;
 
     private options: cron.ScheduleOptions = {
-        scheduled: true
+        scheduled: true,
+        recoverMissedExecutions: true
     }
 
-    protected constructor(timeToExecute: string, name: string) {
-        this._scheduleTime = timeToExecute;
-        this._name= name;
+    protected constructor(scheduleTime:string, name:string) {
+        this._scheduleTime = scheduleTime;
+        this._name = name;
         this.initiateScheduler();
     }
 
     private initiateScheduler() {
-        const isJobValidated = cron.validate(this._scheduleTime);
-        if (isJobValidated) {
-            this.options.name = this._name;
-            this.task = cron.schedule(this._scheduleTime, this.taskInitializer, this.options);
-        }
+        console.log(`Info: initiate scheduler with name: ${this._name }`);
+        this.options.name = this._name;
+        this.task = cron.schedule(this._scheduleTime, this.taskInitializer, this.options);
         this.task.start();
+        console.log(`Info: scheduler started with cron expression: ${this._scheduleTime } and with name: ${this._name }`);
     }
 
-    async taskInitializer() : Promise<void>{
-        const job: SchedulerResult = await this.executeScheduler();
-        if (job.success) {
-            console.log("Job Successfully executed");
+    private async taskInitializer() : Promise<void>{
+        const jobResult: SchedulerResult = await this.executeScheduler();
+        if (jobResult.success) {
+            console.log("Scheduler Successfully executed!");
         } else {
-            job.error = new Error("Error to execute the scheduled job");
+            jobResult.error = new Error("Error to execute the scheduled job");
+            console.log(`Error: ${jobResult.error.message }`);
         }
     }
 
-    abstract executeScheduler(): Promise<SchedulerResult>;
-
+    public abstract executeScheduler(): Promise<SchedulerResult>;
 }

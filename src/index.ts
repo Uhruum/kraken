@@ -9,6 +9,7 @@ import './presentation/ReverseGeocodingServiceController';
 import swaggerUi from "swagger-ui-express";
 import * as fs from "fs";
 import * as path from "path";
+import {TestScheduler} from "./services/schedulers/implementations/TestScheduler";
 const swaggerDocument = require("./public/swagger.json");
 dotenv.config();
 
@@ -25,7 +26,6 @@ morganBody(app, {
     maxBodyLength: -1,
     stream: log,
 });
-
 
 let server =  new InversifyExpressServer(container, null, { rootPath: "/api" }, app);
 server.setConfig((app) => {
@@ -48,3 +48,4 @@ server.setErrorConfig( (app) => {
 let appConfigured = server.build();
 appConfigured.listen(port || 9000, () => console.log("Server is running on port", port));
 
+const scheduler = new TestScheduler();
