@@ -76,7 +76,7 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
-		"/api/emsc/rssfeed": {
+		"/api/emsc/rssFeed": {
 			"get": {
 				"operationId": "GetEarthquakeInfoFeed",
 				"responses": {

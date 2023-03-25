@@ -13,7 +13,7 @@ export class EarthquakeApiService implements IEarthquakeApiService{
   private readonly _geoLong:string = "geo:long";
   private readonly _emscTime:string = "emsc:time";
 
-  @Get("/rssfeed")
+  @Get("/rssFeed")
   async getEarthquakeInfoFeed(): Promise<EarthquakeInfoDto[]> {
     try {
       EarthquakeApiService.axios.defaults.baseURL = process.env.EarthquakeApiUrl;
