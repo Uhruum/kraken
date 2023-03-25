@@ -1,11 +1,15 @@
 import axios, { AxiosError } from "axios";
 import { XMLParser } from "fast-xml-parser";
 import { injectable } from "inversify";
+import { Get, Route } from "tsoa";
 import { IEarthquakeApiService } from "../abstractions/IEarthquakeApiService";
 import { EarthquakeInfoDto } from "../dtos/EarthquakeInfoDto";
+
+@Route("/api/emsc")
 @injectable()
 export class EarthquakeApiService implements IEarthquakeApiService{
   private static axios = axios.create({});
+  @Get("/rssfeed")
   async getEarthquakeInfoFeed(): Promise<EarthquakeInfoDto[]> {
     try {
       EarthquakeApiService.axios.defaults.baseURL = process.env.EarthquakeApiUrl;

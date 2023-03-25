@@ -5,7 +5,8 @@ import { InversifyExpressServer } from 'inversify-express-utils';
 import container from "./inversify.config";
 import './presentation/EmscController';
 import morgan from "morgan";
-
+import swaggerUi from "swagger-ui-express";
+const swaggerDocument = require("./public/swagger.json");
 dotenv.config();
 
 const port = process.env.PORT;
@@ -16,8 +17,21 @@ let server =  new InversifyExpressServer(container, null, { rootPath: "/api" }, 
 server.setConfig((app) => {
   app.use(express.json());
   app.use(morgan("combined"));
-  app.use(express.static("public"));
+  app.use(express.static("/src/public"));
+  app.use(
+    "/api/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument)
+  );
 });
+
+server.setErrorConfig( (app) => {
+  app.use( ( err : Error , request : express.Request , response : express.Response , next : express.NextFunction ) => {
+      console.error( err.stack );
+      response.status( 500 ).send( "Something broke!" );
+  } );
+} );
+
 let appConfigured = server.build();
 appConfigured.listen(port || 9000, () => console.log("Server is running on port", port));
 

@@ -1,0 +1,77 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"EarthquakeInfoDto": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"lat": {
+						"type": "number",
+						"format": "double"
+					},
+					"long": {
+						"type": "number",
+						"format": "double"
+					},
+					"time": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"link": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"title",
+					"lat",
+					"long",
+					"time",
+					"link"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "",
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/api/emsc/rssfeed": {
+			"get": {
+				"operationId": "GetEarthquakeInfoFeed",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/EarthquakeInfoDto"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
