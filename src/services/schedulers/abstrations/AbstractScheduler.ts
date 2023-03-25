@@ -1,39 +1,34 @@
-import {SchedulerResult} from "../results/SchedulerResult";
-import * as cron from 'node-cron';
 import {IScheduler} from "./IScheduler";
-export abstract class AbstractScheduler implements IScheduler{
+import {CronJob} from "cron";
+
+export abstract class AbstractScheduler implements IScheduler {
     private readonly _scheduleTime: string;
     private readonly _name: string;
-    private task: cron.ScheduledTask;
+    private task: CronJob;
 
-    private options: cron.ScheduleOptions = {
-        scheduled: true,
-        recoverMissedExecutions: true
-    }
-
-    protected constructor(scheduleTime:string, name:string) {
-        this._scheduleTime = scheduleTime;
-        this._name = name;
+    protected constructor() {
+        this._scheduleTime = this.getCroneExpression();
+        this._name = this.getSchedulerName();
         this.initiateScheduler();
     }
 
     private initiateScheduler() {
-        console.log(`Info: initiate scheduler with name: ${this._name }`);
-        this.options.name = this._name;
-        this.task = cron.schedule(this._scheduleTime, this.taskInitializer, this.options);
-        this.task.start();
-        console.log(`Info: scheduler started with cron expression: ${this._scheduleTime } and with name: ${this._name }`);
-    }
+        console.log(`Info: initiate scheduler with name: ${this._name}`);
+        this.task = new CronJob(this._scheduleTime, this.executeScheduler);
+        // Start job
+        if (!this.task.running) {
+            this.task.start();
+            console.log(`Info: scheduler started with cron expression: ${this._scheduleTime} and name: ${this._name}`);
 
-    private async taskInitializer() : Promise<void>{
-        const jobResult: SchedulerResult = await this.executeScheduler();
-        if (jobResult.success) {
-            console.log("Scheduler Successfully executed!");
         } else {
-            jobResult.error = new Error("Error to execute the scheduled job");
-            console.log(`Error: ${jobResult.error.message }`);
+            console.log(`Info: scheduler already running with cron expression: ${this._scheduleTime} and name: ${this._name}`);
         }
+
     }
 
-    public abstract executeScheduler(): Promise<SchedulerResult>;
+    abstract executeScheduler(): Promise<void>;
+
+    abstract getCroneExpression(): string;
+
+    abstract getSchedulerName(): string;
 }

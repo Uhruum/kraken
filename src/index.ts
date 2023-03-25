@@ -48,4 +48,6 @@ server.setErrorConfig( (app) => {
 let appConfigured = server.build();
 appConfigured.listen(port || 9000, () => console.log("Server is running on port", port));
 
-const scheduler = new TestScheduler();
+if(process.env.RunTestScheduler){
+    const scheduler = new TestScheduler();
+}

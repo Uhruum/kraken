@@ -1,21 +1,27 @@
 import {AbstractScheduler} from "../abstrations/AbstractScheduler";
-import {SchedulerResult} from "../results/SchedulerResult";
 import {injectable} from "inversify";
+import * as os from "os";
 @injectable()
 export class TestScheduler extends AbstractScheduler{
     constructor() {
-        super("*/15 * * * * *","TestScheduler");
+        super();
     }
-    public override async executeScheduler(): Promise<SchedulerResult> {
-        let result : SchedulerResult = new SchedulerResult();
+    override async executeScheduler(): Promise<void> {
         try {
-            const currentDate = new Date();
-            console.log(`Build and send the weekly report - ${currentDate.getHours()}:${currentDate.getMinutes()}`);
-            result.success = true;
-            return result;
+            let heap = process.memoryUsage().heapUsed / 1024 / 1024;
+            let date = new Date().toISOString();
+            const freeMemory = Math.round((os.freemem() * 100) / os.totalmem()) + "%";
+            console.log(`TestScheduler report - date: ${date}, heap: ${heap}, freeMemory: ${freeMemory} `);
         } catch (e) {
-            result.error = e as Error;
-            return result;
+            throw e as Error;
         }
+    }
+
+    override getCroneExpression(): string {
+        return  `${process.env.TestSchedulerCronExpression}`;
+    }
+
+    override getSchedulerName(): string {
+        return TestScheduler.name;
     }
 }
