@@ -13,7 +13,7 @@ import * as path from "path";
 import process from "process";
 import TYPES from "./types";
 import {ISchedulerService} from "./services/schedulers/abstrations/ISchedulerService";
-const swaggerDocument = require("./public/swagger.json");
+const swaggerDocument = require("./presentation/public/swagger.json");
 import './domain/index';
 dotenv.config();
 
@@ -34,7 +34,7 @@ morganBody(app, {
 let server =  new InversifyExpressServer(container, null, { rootPath: "/api" }, app);
 server.setConfig((app) => {
   app.use(express.json());
-  app.use(express.static("/src/public"));
+  app.use(express.static("/src/presentation/public"));
   app.use(
     "/api/docs",
     swaggerUi.serve,
