@@ -2,9 +2,11 @@ import {AbstractScheduler} from "../abstrations/AbstractScheduler";
 import {IEarthquakeApiService} from "../../emsc/abstractions/IEarthquakeApiService";
 import {inject, injectable} from "inversify";
 import TYPES from "../../../types";
+import Tag from "../../../tags";
+import {IScheduler} from "../abstrations/IScheduler";
 
 @injectable()
-export class EarthquakeApiScheduler extends AbstractScheduler {
+export class EarthquakeApiScheduler extends AbstractScheduler implements IScheduler{
     private _earthquakeApiService: IEarthquakeApiService;
     constructor(@inject(TYPES.IEarthquakeApiService) earthquakeApiService: IEarthquakeApiService) {
         super();
@@ -13,17 +15,22 @@ export class EarthquakeApiScheduler extends AbstractScheduler {
 
     override async executeScheduler(): Promise<void> {
         try {
-            await this._earthquakeApiService.getEarthquakeInfoFeed();
+            const earthquakeInfoDtos = await this._earthquakeApiService.getEarthquakeInfoFeed();
+            console.log(`EarthquakeApiScheduler result: ${earthquakeInfoDtos}`);
         } catch (e) {
             throw e as Error;
         }
     }
 
-    getCroneExpression(): string {
-        return "* */5 * * * *";
+    override getCroneExpression(): string {
+        return `${process.env.EarthquakeApiSchedulerCronExpression}`;
     }
 
-    getSchedulerName(): string {
+    override getSchedulerName(): string {
         return EarthquakeApiScheduler.name;
+    }
+
+    override getSchedulerTag(): Tag {
+        return Tag.EARTH_QUAKE_SCHEDULER;
     }
 }

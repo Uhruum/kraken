@@ -4,7 +4,8 @@ import {IScheduler} from "./services/schedulers/abstrations/IScheduler";
 let TYPES = {
   IEarthquakeApiService: Symbol("IEarthquakeApiService"),
   IReverseGeocodingService:Symbol("IReverseGeocodingService"),
-  IScheduler:Symbol("IScheduler")
+  IScheduler:Symbol("IScheduler"),
+  ISchedulerService:Symbol("ISchedulerService")
 };
 
 export default TYPES;
