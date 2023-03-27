@@ -1,9 +1,11 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { XMLParser } from "fast-xml-parser";
-import { injectable } from "inversify";
+import {inject, injectable} from "inversify";
 import {Get, Route, Tags} from "tsoa";
 import { IEarthquakeApiService } from "../abstractions/IEarthquakeApiService";
 import { EarthquakeInfoDto } from "../dtos/EarthquakeInfoDto";
+import TYPES from "../../../types";
+import {ILogger} from "../../logger/abstractions/ILogger";
 @Tags('Earthquake Api Service')
 @Route("/api/emsc")
 @injectable()
@@ -12,6 +14,9 @@ export class EarthquakeApiService implements IEarthquakeApiService{
   private readonly _geoLat:string = "geo:lat";
   private readonly _geoLong:string = "geo:long";
   private readonly _emscTime:string = "emsc:time";
+
+  constructor(@inject(TYPES.ILogger) private readonly logger: ILogger) {
+  }
 
   @Get("/rssFeed")
   async getEarthquakeInfoFeed(): Promise<EarthquakeInfoDto[]> {
@@ -26,8 +31,9 @@ export class EarthquakeApiService implements IEarthquakeApiService{
       });
       return earthquakeInfoDtoArray;
     } catch (e) {
-      const error = e as AxiosError;
-      throw new Error(error.message);
+      const error = e as Error;
+      this.logger.log("ERROR",error.message);
+      throw error;
     }
   }
  

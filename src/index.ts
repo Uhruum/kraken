@@ -14,7 +14,7 @@ import process from "process";
 import TYPES from "./types";
 import {ISchedulerService} from "./services/schedulers/abstrations/ISchedulerService";
 const swaggerDocument = require("./presentation/public/swagger.json");
-import './domain/index';
+
 dotenv.config();
 
 const port = process.env.PORT;

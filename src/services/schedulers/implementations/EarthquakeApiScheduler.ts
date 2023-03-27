@@ -4,21 +4,22 @@ import {inject, injectable} from "inversify";
 import TYPES from "../../../types";
 import Tag from "../../../tags";
 import {IScheduler} from "../abstrations/IScheduler";
+import {ILogger} from "../../logger/abstractions/ILogger";
 
 @injectable()
-export class EarthquakeApiScheduler extends AbstractScheduler implements IScheduler{
-    private _earthquakeApiService: IEarthquakeApiService;
-    constructor(@inject(TYPES.IEarthquakeApiService) earthquakeApiService: IEarthquakeApiService) {
+export class EarthquakeApiScheduler extends AbstractScheduler implements IScheduler {
+    constructor(@inject(TYPES.IEarthquakeApiService) private readonly earthquakeApiService: IEarthquakeApiService, @inject(TYPES.ILogger) private readonly logger: ILogger) {
         super();
-        this._earthquakeApiService = earthquakeApiService;
     }
 
     override async executeScheduler(): Promise<void> {
         try {
-            const earthquakeInfoDtos = await this._earthquakeApiService.getEarthquakeInfoFeed();
-            console.log(`EarthquakeApiScheduler result: ${earthquakeInfoDtos}`);
+            const earthquakeInfoDtos = await this.earthquakeApiService.getEarthquakeInfoFeed();
+            this.logger.log("INFO",`EarthquakeApiScheduler result: ${earthquakeInfoDtos}`);
         } catch (e) {
-            throw e as Error;
+            const error = e as Error;
+            this.logger.log("ERROR",error.message);
+            throw error;
         }
     }
 

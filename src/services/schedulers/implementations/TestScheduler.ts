@@ -1,11 +1,13 @@
 import {AbstractScheduler} from "../abstrations/AbstractScheduler";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import * as os from "os";
 import Tag from "../../../tags";
 import {IScheduler} from "../abstrations/IScheduler";
+import TYPES from "../../../types";
+import {ILogger} from "../../logger/abstractions/ILogger";
 @injectable()
 export class TestScheduler extends AbstractScheduler implements IScheduler{
-    constructor() {
+    constructor(@inject(TYPES.ILogger) private readonly logger: ILogger) {
         super();
     }
     override async executeScheduler(): Promise<void> {
@@ -13,9 +15,11 @@ export class TestScheduler extends AbstractScheduler implements IScheduler{
             let heap = process.memoryUsage().heapUsed / 1024 / 1024;
             let date = new Date().toISOString();
             const freeMemory = Math.round((os.freemem() * 100) / os.totalmem()) + "%";
-            console.log(`TestScheduler report - date: ${date}, heap: ${heap}, freeMemory: ${freeMemory} `);
+            this.logger.log("INFO",`TestScheduler report - date: ${date}, heap: ${heap}, freeMemory: ${freeMemory} `);
         } catch (e) {
-            throw e as Error;
+            const error = e as Error;
+            this.logger.log("ERROR",error.message);
+            throw error;
         }
     }
 

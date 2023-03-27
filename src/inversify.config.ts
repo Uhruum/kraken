@@ -10,9 +10,14 @@ import {EarthquakeApiScheduler} from "./services/schedulers/implementations/Eart
 import {TestScheduler} from "./services/schedulers/implementations/TestScheduler";
 import {ISchedulerService} from "./services/schedulers/abstrations/ISchedulerService";
 import {SchedulerService} from "./services/schedulers/implementations/SchedulerService";
+import {ILogger} from "./services/logger/abstractions/ILogger";
+import {Logger} from "./services/logger/implementations/Logger";
+import {DatabaseService} from "./domain/DatabaseService";
+import {IDatabaseService} from "./domain/IDatabaseService";
 
 let container = new Container();
-
+container.bind<ILogger>(TYPES.ILogger).to(Logger);
+container.bind<IDatabaseService>(TYPES.IDatabaseService).to(DatabaseService);
 container.bind<IEarthquakeApiService>(TYPES.IEarthquakeApiService ).to(EarthquakeApiService).inSingletonScope();
 container.bind<IReverseGeocodingService>(TYPES.IReverseGeocodingService ).to(ReverseGeocodingService).inRequestScope();
 container.bind<IScheduler>(TYPES.IScheduler).to(EarthquakeApiScheduler).inSingletonScope().whenTargetNamed(Tag.EARTH_QUAKE_SCHEDULER);
