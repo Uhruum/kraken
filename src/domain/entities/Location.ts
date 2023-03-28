@@ -1,4 +1,12 @@
-import {Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from "typeorm";
 import {Earthquake} from "./Earthquake";
 
 @Entity()
@@ -21,6 +29,12 @@ export class Location{
 
     @Column({ nullable: true })
     countryCode:string;
+
+    @CreateDateColumn()
+    createdDate:Date
+
+    @UpdateDateColumn()
+    updatedDate:Date
 
     @OneToMany(() => Earthquake , (earthquake)=>  earthquake.location)
     @JoinColumn()

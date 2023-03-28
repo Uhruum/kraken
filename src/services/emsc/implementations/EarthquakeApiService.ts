@@ -15,6 +15,7 @@ export class EarthquakeApiService implements IEarthquakeApiService {
     private readonly _geoLat: string = "geo:lat";
     private readonly _geoLong: string = "geo:long";
     private readonly _emscTime: string = "emsc:time";
+    private readonly _emscMagnitude:string = "emsc:magnitude"
 
     constructor(@inject(TYPES.ILogger) private readonly _logger: ILogger) {
     }
@@ -28,7 +29,7 @@ export class EarthquakeApiService implements IEarthquakeApiService {
             const json = parser.parse(response.data);
             let earthquakeInfoDtoArray = new Array<EarthquakeInfoDto>();
             json.rss.channel.item.forEach((item: any) => {
-                earthquakeInfoDtoArray.push(new EarthquakeInfoDto(item.title, item[this._geoLat], item[this._geoLong], item[this._emscTime], item.link));
+                earthquakeInfoDtoArray.push(new EarthquakeInfoDto(item.title, item[this._geoLat], item[this._geoLong], item[this._emscTime], item.link,item[this._emscMagnitude]));
             });
             return earthquakeInfoDtoArray;
         } catch (e) {

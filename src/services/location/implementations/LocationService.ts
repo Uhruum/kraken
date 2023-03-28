@@ -20,6 +20,7 @@ export class LocationService implements ILocationService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
+            this._logger.log("INFO", `getLocation for earthquake - latitude: ${latitude}, latitude: ${longitude} `);
             let location = await queryRunner.manager.findOneBy(Location, {latitude: latitude, longitude: longitude});
             if (location !== null)
                 return location;
@@ -34,6 +35,7 @@ export class LocationService implements ILocationService {
 
             const newLocation = await queryRunner.manager.save(location);
             await queryRunner.commitTransaction();
+            this._logger.log("INFO", `Location saved - latitude: ${latitude}, latitude: ${longitude} `);
             return newLocation;
         } catch (e) {
             const error = e as Error;

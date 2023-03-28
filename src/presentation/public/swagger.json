@@ -25,6 +25,9 @@
 					},
 					"link": {
 						"type": "string"
+					},
+					"magnitude": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -32,7 +35,8 @@
 					"lat",
 					"long",
 					"time",
-					"link"
+					"link",
+					"magnitude"
 				],
 				"type": "object",
 				"additionalProperties": false

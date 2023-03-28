@@ -1,30 +1,35 @@
 import {AbstractScheduler} from "../abstrations/AbstractScheduler";
-import {inject, injectable} from "inversify";
+import {injectable} from "inversify";
 import * as os from "os";
 import Tag from "../../../tags";
 import {IScheduler} from "../abstrations/IScheduler";
-import TYPES from "../../../types";
+import {Logger} from "../../logger/implementations/Logger";
+import container from "../../../inversify.config";
 import {ILogger} from "../../logger/abstractions/ILogger";
-@injectable()
-export class TestScheduler extends AbstractScheduler implements IScheduler{
+import TYPES from "../../../types";
 
-    constructor(@inject(TYPES.ILogger) private readonly _logger: ILogger) {
+@injectable()
+export class TestScheduler extends AbstractScheduler implements IScheduler {
+
+    constructor() {
         super();
     }
+
     override async executeScheduler(): Promise<void> {
+        const logger = container.get<ILogger>(TYPES.ILogger);
         try {
             let heap = process.memoryUsage().heapUsed / 1024 / 1024;
             let date = new Date().toISOString();
             const freeMemory = Math.round((os.freemem() * 100) / os.totalmem()) + "%";
-            this._logger.log("INFO",`TestScheduler report - date: ${date}, heap: ${heap}, freeMemory: ${freeMemory} `);
+            logger.log("INFO", `TestScheduler report - date: ${date}, heap: ${heap}, freeMemory: ${freeMemory} `);
         } catch (e) {
             const error = e as Error;
-            this._logger.log("ERROR",error.message);
+            logger.log("ERROR", error.message);
         }
     }
 
     override getCroneExpression(): string {
-        return  `${process.env.TestSchedulerCronExpression}`;
+        return `${process.env.TestSchedulerCronExpression}`;
     }
 
     override getSchedulerName(): string {

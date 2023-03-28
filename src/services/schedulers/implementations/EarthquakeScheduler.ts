@@ -1,25 +1,26 @@
 import {AbstractScheduler} from "../abstrations/AbstractScheduler";
-import {IEarthquakeApiService} from "../../emsc/abstractions/IEarthquakeApiService";
-import {inject, injectable} from "inversify";
+import { injectable} from "inversify";
 import TYPES from "../../../types";
 import Tag from "../../../tags";
 import {IScheduler} from "../abstrations/IScheduler";
 import {ILogger} from "../../logger/abstractions/ILogger";
 import {IEarthquakeService} from "../../earthquake/abstractions/IEarthquakeService";
+import container from "../../../inversify.config";
 
 @injectable()
 export class EarthquakeScheduler extends AbstractScheduler implements IScheduler {
-    constructor(@inject(TYPES.IEarthquakeService) private readonly _earthquakeService: IEarthquakeService,
-                @inject(TYPES.ILogger) private readonly _logger: ILogger) {
+    constructor() {
         super();
     }
 
     override async executeScheduler(): Promise<void> {
+        const logger = container.get<ILogger>(TYPES.ILogger);
+        const earthquakeService = container.get<IEarthquakeService>(TYPES.IEarthquakeService);
         try {
-            await this._earthquakeService.saveEarthquakeFeed();
+            await earthquakeService.saveEarthquakeFeed();
         } catch (e) {
             const error = e as Error;
-            this._logger.log("ERROR", `msg: ${error.message} \nstackTrace: ${error.stack}`);
+            logger.log("ERROR", `msg: ${error.message} \nstackTrace: ${error.stack}`);
         }
     }
 

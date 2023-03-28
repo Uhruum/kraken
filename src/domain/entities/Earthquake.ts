@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, PrimaryColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn, UpdateDateColumn} from "typeorm";
 import {Location} from "./Location";
 
 @Entity()
@@ -11,7 +11,16 @@ export class Earthquake{
     title: string
 
     @Column()
+    magnitude:number
+
+    @Column()
     time: Date
+
+    @CreateDateColumn()
+    createdDate:Date
+
+    @UpdateDateColumn()
+    updatedDate:Date
 
     @ManyToOne(() => Location, (location) => location.earthquakes)
     location: Location;
