@@ -5,21 +5,21 @@ import TYPES from "../../../types";
 import Tag from "../../../tags";
 import {IScheduler} from "../abstrations/IScheduler";
 import {ILogger} from "../../logger/abstractions/ILogger";
+import {IEarthquakeService} from "../../earthquake/abstractions/IEarthquakeService";
 
 @injectable()
-export class EarthquakeApiScheduler extends AbstractScheduler implements IScheduler {
-    constructor(@inject(TYPES.IEarthquakeApiService) private readonly earthquakeApiService: IEarthquakeApiService, @inject(TYPES.ILogger) private readonly logger: ILogger) {
+export class EarthquakeScheduler extends AbstractScheduler implements IScheduler {
+    constructor(@inject(TYPES.IEarthquakeService) private readonly _earthquakeService: IEarthquakeService,
+                @inject(TYPES.ILogger) private readonly _logger: ILogger) {
         super();
     }
 
     override async executeScheduler(): Promise<void> {
         try {
-            const earthquakeInfoDtos = await this.earthquakeApiService.getEarthquakeInfoFeed();
-            this.logger.log("INFO",`EarthquakeApiScheduler result: ${earthquakeInfoDtos}`);
+            await this._earthquakeService.saveEarthquakeFeed();
         } catch (e) {
             const error = e as Error;
-            this.logger.log("ERROR",error.message);
-            throw error;
+            this._logger.log("ERROR", `msg: ${error.message} \nstackTrace: ${error.stack}`);
         }
     }
 
@@ -28,7 +28,7 @@ export class EarthquakeApiScheduler extends AbstractScheduler implements ISchedu
     }
 
     override getSchedulerName(): string {
-        return EarthquakeApiScheduler.name;
+        return EarthquakeScheduler.name;
     }
 
     override getSchedulerTag(): Tag {

@@ -7,9 +7,7 @@ import {IReverseGeocodingService} from "../services/reverseGeocoding/abstraction
 @controller("/reverseGeocoding")
 export class ReverseGeocodingServiceController implements interfaces.Controller {
 
-    private _reverseGeocodingService: IReverseGeocodingService;
-    constructor(@inject(TYPES.IReverseGeocodingService) reverseGeocodingService: IReverseGeocodingService) {
-        this._reverseGeocodingService = reverseGeocodingService;
+    constructor(@inject(TYPES.IReverseGeocodingService) private readonly _reverseGeocodingService: IReverseGeocodingService) {
     }
 
     @httpGet("/locationInfo/:longitude/:latitude")

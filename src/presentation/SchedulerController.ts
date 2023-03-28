@@ -6,9 +6,7 @@ import * as express from "express";
 
 @controller("/scheduler")
 export class SchedulerController {
-    private _schedulerService: ISchedulerService;
-    constructor(@inject(TYPES.ISchedulerService) schedulerService: ISchedulerService) {
-        this._schedulerService = schedulerService;
+    constructor(@inject(TYPES.ISchedulerService) private readonly _schedulerService: ISchedulerService) {
     }
 
     @httpPost("/startSchedulers")

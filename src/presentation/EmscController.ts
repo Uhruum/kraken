@@ -7,9 +7,7 @@ import TYPES from '../types';
 @controller("/emsc")
 export class EmscController implements interfaces.Controller {
 
-  private _earthquakeApiService: IEarthquakeApiService;
-  constructor(@inject(TYPES.IEarthquakeApiService) earthquakeApiService: IEarthquakeApiService) {
-      this._earthquakeApiService = earthquakeApiService;
+  constructor(@inject(TYPES.IEarthquakeApiService) private readonly _earthquakeApiService: IEarthquakeApiService) {
   }
 
   @httpGet("/rssFeed")

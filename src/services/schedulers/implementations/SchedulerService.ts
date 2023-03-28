@@ -12,20 +12,16 @@ import {SchedulerResultDto} from "../dtos/SchedulerResultDto";
 @injectable()
 export class SchedulerService implements ISchedulerService {
 
-    private readonly _testScheduler: IScheduler;
-    private readonly _earthQuakeApiScheduler : IScheduler;
-    constructor(@inject(TYPES.IScheduler) @named(Tag.TEST_SCHEDULER) test: IScheduler,
-                @inject(TYPES.IScheduler) @named(Tag.EARTH_QUAKE_SCHEDULER) quake: IScheduler) {
-        this._testScheduler = test;
-        this._earthQuakeApiScheduler = quake;
+    constructor(@inject(TYPES.IScheduler) @named(Tag.TEST_SCHEDULER) private readonly _test: IScheduler,
+                @inject(TYPES.IScheduler) @named(Tag.EARTH_QUAKE_SCHEDULER) private readonly _quake: IScheduler) {
     }
 
     @Post("/startSchedulers")
     async startSchedulers(): Promise<SchedulerResultDto> {
         let resultDto= new SchedulerResultDto();
         try {
-            await this._testScheduler.startScheduler();
-            await this._earthQuakeApiScheduler.startScheduler();
+            await this._test.startScheduler();
+            await this._quake.startScheduler();
             resultDto.message = "Schedulers started successfully!";
         }catch (e) {
             resultDto.isErrorThrown=true;
@@ -49,8 +45,8 @@ export class SchedulerService implements ISchedulerService {
     async stopSchedulers(): Promise<SchedulerResultDto> {
         let resultDto= new SchedulerResultDto();
         try {
-            await this._testScheduler.stopScheduler();
-            await this._earthQuakeApiScheduler.stopScheduler();
+            await this._test.stopScheduler();
+            await this._quake.stopScheduler();
             resultDto.message = "Schedulers stopped successfully!";
         }catch (e) {
             resultDto.error = e as Error;

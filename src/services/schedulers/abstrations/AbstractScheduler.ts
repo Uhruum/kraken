@@ -1,7 +1,9 @@
 import {CronJob} from "cron";
 import Tag from "../../../tags";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {IScheduler} from "./IScheduler";
+import {ILogger} from "../../logger/abstractions/ILogger";
+import TYPES from "../../../types";
 @injectable()
 export abstract class AbstractScheduler implements IScheduler{
     private cronJob: CronJob;

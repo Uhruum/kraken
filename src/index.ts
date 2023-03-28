@@ -4,21 +4,18 @@ import express from 'express';
 import {InversifyExpressServer} from 'inversify-express-utils';
 import morganBody from 'morgan-body';
 import container from "./inversify.config";
-import './presentation/EmscController';
-import './presentation/ReverseGeocodingServiceController';
-import './presentation/SchedulerController';
+import './presentation/index';
 import swaggerUi from "swagger-ui-express";
 import * as fs from "fs";
 import * as path from "path";
 import process from "process";
 import TYPES from "./types";
 import {ISchedulerService} from "./services/schedulers/abstrations/ISchedulerService";
+import {ILogger} from "./services/logger/abstractions/ILogger";
 const swaggerDocument = require("./presentation/public/swagger.json");
 
 dotenv.config();
-
 const port = process.env.PORT;
-
 const app = express();
 
 const log = fs.createWriteStream(
@@ -54,11 +51,12 @@ let appConfigured = server.build();
 appConfigured.listen(port || 9000, () => console.log("Server is running on port", port));
 
 if(process.env.RunSchedulersAtStart === "true"){
+    const logger = container.get<ILogger>(TYPES.ILogger);
     const schedulerService = container.get<ISchedulerService>(TYPES.ISchedulerService);
     schedulerService.startSchedulers().then(r => {
         if(!r.isErrorThrown)
-            console.log(r.message);
+            logger.log("INFO",r.message);
         else
-            console.log(r.error.message);
+            logger.log("ERROR",r.error.message);
     });
 }

@@ -50,7 +50,7 @@
 					"city": {
 						"type": "string"
 					},
-					"country": {
+					"countryName": {
 						"type": "string"
 					},
 					"countryCode": {
@@ -61,7 +61,7 @@
 					"latitude",
 					"longitude",
 					"city",
-					"country",
+					"countryName",
 					"countryCode"
 				],
 				"type": "object",
@@ -306,6 +306,21 @@
 						}
 					}
 				}
+			}
+		},
+		"/api/earthquake/saveEarthquakeFeed": {
+			"post": {
+				"operationId": "SaveEarthquakeFeed",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Earthquake Service"
+				],
+				"security": [],
+				"parameters": []
 			}
 		}
 	},
