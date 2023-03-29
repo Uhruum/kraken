@@ -128,6 +128,74 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"EarthquakeSearchResultDto": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"magnitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"time": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"city": {
+						"type": "string"
+					},
+					"country": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"title",
+					"magnitude",
+					"time",
+					"latitude",
+					"longitude"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EarthquakePaginatedSearchResultDto": {
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/EarthquakeSearchResultDto"
+						},
+						"type": "array"
+					},
+					"totalCount": {
+						"type": "number",
+						"format": "double"
+					},
+					"pagesCount": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"data",
+					"totalCount",
+					"pagesCount"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -325,6 +393,79 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/api/earthquake/getEarthquakeById/{id}": {
+			"get": {
+				"operationId": "GetEarthquakeById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/EarthquakeSearchResultDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Earthquake Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/earthquake/getAllEarthquakes/{page}/{rowsPerPage}": {
+			"get": {
+				"operationId": "GetAllEarthquakes",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/EarthquakePaginatedSearchResultDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Earthquake Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "page",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "path",
+						"name": "rowsPerPage",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		}
 	},
