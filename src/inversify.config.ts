@@ -20,13 +20,13 @@ import {IEarthquakeService} from "./services/earthquake/abstractions/IEarthquake
 import {EarthquakeService} from "./services/earthquake/implementations/EarthquakeService";
 
 let container = new Container();
-container.bind<ILogger>(TYPES.ILogger).to(Logger);
-container.bind<IDatabaseService>(TYPES.IDatabaseService).to(DatabaseService);
+container.bind<ILogger>(TYPES.ILogger).to(Logger).inSingletonScope();
+container.bind<IDatabaseService>(TYPES.IDatabaseService).to(DatabaseService).inSingletonScope();
 container.bind<IEarthquakeApiService>(TYPES.IEarthquakeApiService ).to(EarthquakeApiService).inRequestScope();
 container.bind<IReverseGeocodingService>(TYPES.IReverseGeocodingService ).to(ReverseGeocodingService).inRequestScope();
-container.bind<IScheduler>(TYPES.IScheduler).to(EarthquakeScheduler).whenTargetNamed(Tag.EARTH_QUAKE_SCHEDULER);
-container.bind<IScheduler>(TYPES.IScheduler).to(TestScheduler).whenTargetNamed(Tag.TEST_SCHEDULER);
+container.bind<IScheduler>(TYPES.IScheduler).to(EarthquakeScheduler).inSingletonScope().whenTargetNamed(Tag.EARTH_QUAKE_SCHEDULER);
+container.bind<IScheduler>(TYPES.IScheduler).to(TestScheduler).inSingletonScope().whenTargetNamed(Tag.TEST_SCHEDULER);
 container.bind<ISchedulerService>(TYPES.ISchedulerService ).to(SchedulerService);
 container.bind<ILocationService>(TYPES.ILocationService ).to(LocationService).inRequestScope();
-container.bind<IEarthquakeService>(TYPES.IEarthquakeService).to(EarthquakeService).inRequestScope()
+container.bind<IEarthquakeService>(TYPES.IEarthquakeService).to(EarthquakeService).inRequestScope();
 export default container;

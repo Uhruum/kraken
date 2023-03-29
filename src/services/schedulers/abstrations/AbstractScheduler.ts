@@ -1,17 +1,15 @@
 import {CronJob} from "cron";
 import Tag from "../../../tags";
-import {inject, injectable} from "inversify";
+import {injectable} from "inversify";
 import {IScheduler} from "./IScheduler";
-import {ILogger} from "../../logger/abstractions/ILogger";
 import TYPES from "../../../types";
-@injectable()
-export abstract class AbstractScheduler implements IScheduler{
-    private cronJob: CronJob;
+import {ILogger} from "../../logger/abstractions/ILogger";
+import container from "../../../inversify.config";
 
-    private initiateScheduler() {
-        console.log(`Info: initiate scheduler with name: ${this.getSchedulerName()}`);
-        this.cronJob = new CronJob(this.getCroneExpression(), this.executeScheduler);
-    }
+@injectable()
+export abstract class AbstractScheduler implements IScheduler {
+    private _cronJob: CronJob;
+    private _logger: ILogger;
 
     abstract executeScheduler(): Promise<void>;
 
@@ -20,30 +18,34 @@ export abstract class AbstractScheduler implements IScheduler{
     abstract getSchedulerName(): string;
 
     async startScheduler(): Promise<string> {
-        this.initiateScheduler();
+        this._logger = container.get<ILogger>(TYPES.ILogger);
+        this._logger.log("INFO", `Initiate scheduler with name: ${this.getSchedulerName()}`);
+        this._cronJob = new CronJob(this.getCroneExpression(), this.executeScheduler);
 
-        if (!this.cronJob.running) {
-            this.cronJob.start();
-            console.log(`Info: scheduler started with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
+        if (!this._cronJob.running) {
+            this._cronJob.start();
+            this._logger.log("INFO", `Scheduler started with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
             return `Scheduler started with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`;
         } else {
-            console.log(`Info: scheduler already running with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
+            this._logger.log("INFO", `Scheduler already running with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
             return `Scheduler already running with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`;
         }
     }
 
     async stopScheduler(): Promise<string> {
-        if(this.cronJob == undefined){
-            console.log(`Info: nothing to stop, scheduler was never started with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
+        this._logger = container.get<ILogger>(TYPES.ILogger);
+
+        if (this._cronJob == undefined) {
+            this._logger.log("INFO", `Nothing to stop, scheduler was never started with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
             return `Nothing to stop, scheduler was never started with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`;
         }
 
-        if (this.cronJob.running) {
-            this.cronJob.stop();
-            console.log(`Info: scheduler stopped with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
+        if (this._cronJob.running) {
+            this._cronJob.stop();
+            this._logger.log("INFO", `Scheduler stopped with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
             return `Scheduler stopped with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`;
         } else {
-            console.log(`Info: scheduler already stopped with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
+            this._logger.log("INFO", `Scheduler already stopped with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`);
             return `Scheduler already stopped with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`;
         }
     }

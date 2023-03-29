@@ -3,7 +3,6 @@ import {injectable} from "inversify";
 import * as os from "os";
 import Tag from "../../../tags";
 import {IScheduler} from "../abstrations/IScheduler";
-import {Logger} from "../../logger/implementations/Logger";
 import container from "../../../inversify.config";
 import {ILogger} from "../../logger/abstractions/ILogger";
 import TYPES from "../../../types";
