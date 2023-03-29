@@ -3,7 +3,7 @@ import {
     CreateDateColumn,
     Entity,
     JoinColumn,
-    OneToMany,
+    OneToMany, PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
@@ -12,13 +12,10 @@ import {Earthquake} from "./Earthquake";
 @Entity()
 export class Location{
 
-    @PrimaryGeneratedColumn("uuid")
-    id:string
-
-    @Column()
+    @PrimaryColumn()
     latitude: number
 
-    @Column()
+    @PrimaryColumn()
     longitude: number
 
     @Column({ nullable: true })
