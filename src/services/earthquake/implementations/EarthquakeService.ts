@@ -6,11 +6,13 @@ import {ILogger} from "../../logger/abstractions/ILogger";
 import {IEarthquakeApiService} from "../../emsc/abstractions/IEarthquakeApiService";
 import {ILocationService} from "../../location/abstractions/ILocationService";
 import {Earthquake} from "../../../domain/entities/Earthquake";
-import {Get, Path, Post, Route, Tags} from "tsoa";
+import {Get, Path, Post, Query, Route, Tags} from "tsoa";
 import * as util from "util";
 import {EarthquakeSearchResultDto} from "../dtos/EarthquakeSearchResultDto";
 import {EarthquakeNotFoundError} from "../errors/EarthquakeNotFoundError";
 import {EarthquakePaginatedSearchResultDto} from "../dtos/EarthquakePaginatedSearchResultDto";
+import {IEarthquakeQueryProvider} from "../abstractions/IEarthquakeQueryProvider";
+import {IEarthquakeMapper} from "../abstractions/IEarthquakeMapper";
 
 @Tags('Earthquake Service')
 @Route("/api/earthquake")
@@ -20,7 +22,9 @@ export class EarthquakeService implements IEarthquakeService {
     constructor(@inject(TYPES.IEarthquakeApiService) private readonly _earthquakeApiService: IEarthquakeApiService,
                 @inject(TYPES.ILocationService) private readonly _locationService: ILocationService,
                 @inject(TYPES.IDatabaseService) private readonly _database: IDatabaseService,
-                @inject(TYPES.ILogger) private readonly _logger: ILogger) {
+                @inject(TYPES.ILogger) private readonly _logger: ILogger,
+                @inject(TYPES.IEarthquakeQueryProvider) private readonly _earthquakeQueryProvider: IEarthquakeQueryProvider,
+                @inject(TYPES.IEarthquakeMapper) private readonly _earthquakeMapper: IEarthquakeMapper) {
     }
 
     @Post("/saveEarthquakeFeed")
@@ -38,7 +42,11 @@ export class EarthquakeService implements IEarthquakeService {
 
                 const id = Number(earthquakeDto.link.split("?id=")[1]);
                 const magnitude = Number(earthquakeDto.magnitude.split(" ")[1]);
-                let earthquake = await queryRunner.manager.findOneBy(Earthquake, {id: id});
+                let earthquake = await queryRunner.manager.findOne(Earthquake,
+                    {
+                        where: {id: id},
+                        relations: {location: true}
+                    });
 
                 if (earthquake === null)
                     earthquake = new Earthquake();
@@ -66,36 +74,41 @@ export class EarthquakeService implements IEarthquakeService {
 
     @Get("/getEarthquakeById/{id}")
     public async getEarthquakeById(@Path() id: number): Promise<EarthquakeSearchResultDto> {
-        const datasource = await this._database.getDataSource();
-        const earthquakeRepository = datasource.getRepository(Earthquake);
-        const earthquake = await earthquakeRepository.findOneBy({id: id});
+        let earthquakeQb = await this._earthquakeQueryProvider.provideEarthquakeQueryBuilder();
+        earthquakeQb = this._earthquakeQueryProvider.provideQueryGetEarthquakesById(earthquakeQb, id);
+        const earthquake = await earthquakeQb.getOne();
         if (earthquake != null)
-            return new EarthquakeSearchResultDto(earthquake.id, earthquake.title,
-                earthquake.magnitude, earthquake.time, earthquake.location.latitude,
-                earthquake.location.longitude, earthquake.location.city, earthquake.location.country);
+            return this._earthquakeMapper.mapEarthquakeToEarthquakeSearchResultDto(earthquake);
 
         throw new EarthquakeNotFoundError(`Could not find earthquake with id: ${id}`);
     }
-    @Get("/getAllEarthquakes/{page}/{rowsPerPage}")
-    public async getAllEarthquakes(@Path() page: number, @Path() rowsPerPage: number): Promise<EarthquakePaginatedSearchResultDto>{
-        const datasource = await this._database.getDataSource();
-        const earthquakeRepository = datasource.getRepository(Earthquake);
-        const [earthquakes, count] = await earthquakeRepository.findAndCount({
-            order: { id: "DESC", },
-            skip: rowsPerPage,
-            take: page,
-        });
 
-        if(count == 0)
+    @Get("/queryEarthquakes")
+    public async queryEarthquakes(
+        @Query("page") page: number, @Query("rowsPerPage") rowsPerPage: number,
+        @Query("byLatitude") byLatitude?: number, @Query("byLongitude") byLongitude?: number,
+        @Query("byCountry") byCountry?: string, @Query("byYear") byYear?: number,
+        @Query("inLastDays") inLastDays?: number, @Query("inLastHours") inLastHours?: number,
+        @Query("byMagnitude") byMagnitude?: number): Promise<EarthquakePaginatedSearchResultDto> {
+
+        let earthquakeQb = await this._earthquakeQueryProvider.provideEarthquakeQueryBuilder();
+        earthquakeQb = this._earthquakeQueryProvider.provideQueryFindAllEarthquakesByLatAndLong(earthquakeQb, byLatitude, byLongitude);
+        earthquakeQb = this._earthquakeQueryProvider.provideQueryFindAllEarthquakesByCountry(earthquakeQb, byCountry);
+        earthquakeQb = this._earthquakeQueryProvider.provideQueryFindAllEarthquakesByYear(earthquakeQb, byYear);
+        earthquakeQb = this._earthquakeQueryProvider.provideQueryFindAllEarthquakesInLastDays(earthquakeQb, inLastDays);
+        earthquakeQb = this._earthquakeQueryProvider.provideQueryFindAllEarthquakesInLastHours(earthquakeQb, inLastHours);
+        earthquakeQb = this._earthquakeQueryProvider.provideQueryFindAllEarthquakesByMagnitude(earthquakeQb, byMagnitude);
+        const [earthquakes, count] = await earthquakeQb
+            .orderBy("quake.id", "DESC")
+            .skip(page * rowsPerPage)
+            .take(rowsPerPage)
+            .getManyAndCount();
+
+        if (count == 0)
             return new EarthquakePaginatedSearchResultDto(new Array<EarthquakeSearchResultDto>(), count, count);
-        let earthquakeSearchResultDtos = new Array<EarthquakeSearchResultDto>();
-        for (const earthquake of earthquakes){
-            earthquakeSearchResultDtos.push(new EarthquakeSearchResultDto(earthquake.id, earthquake.title,
-                earthquake.magnitude, earthquake.time, earthquake.location.latitude,
-                earthquake.location.longitude, earthquake.location.city, earthquake.location.country));
-        }
-        const pagesCount=  rowsPerPage > count ? 1 :  count/rowsPerPage;
-        return new EarthquakePaginatedSearchResultDto(earthquakeSearchResultDtos,count,pagesCount);
+
+        const pagesCount = rowsPerPage > count ? 0 : Math.round((count / rowsPerPage) - 1);
+        return new EarthquakePaginatedSearchResultDto(this._earthquakeMapper.mapEarthquakeArrayToEarthquakeSearchResultDtoArray(earthquakes), count, pagesCount);
     }
 
 }

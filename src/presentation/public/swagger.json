@@ -427,9 +427,9 @@
 				]
 			}
 		},
-		"/api/earthquake/getAllEarthquakes/{page}/{rowsPerPage}": {
+		"/api/earthquake/queryEarthquakes": {
 			"get": {
-				"operationId": "GetAllEarthquakes",
+				"operationId": "QueryEarthquakes",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -448,7 +448,7 @@
 				"security": [],
 				"parameters": [
 					{
-						"in": "path",
+						"in": "query",
 						"name": "page",
 						"required": true,
 						"schema": {
@@ -457,9 +457,71 @@
 						}
 					},
 					{
-						"in": "path",
+						"in": "query",
 						"name": "rowsPerPage",
 						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "byLatitude",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "byLongitude",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "byCountry",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "byYear",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "inLastDays",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "inLastHours",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "byMagnitude",
+						"required": false,
 						"schema": {
 							"format": "double",
 							"type": "number"
