@@ -30,9 +30,9 @@ container.bind<IEarthquakeApiService>(TYPES.IEarthquakeApiService ).to(Earthquak
 container.bind<IReverseGeocodingService>(TYPES.IReverseGeocodingService ).to(ReverseGeocodingService).inRequestScope();
 container.bind<IScheduler>(TYPES.IScheduler).to(EarthquakeScheduler).inSingletonScope().whenTargetNamed(Tag.EARTH_QUAKE_SCHEDULER);
 container.bind<IScheduler>(TYPES.IScheduler).to(TestScheduler).inSingletonScope().whenTargetNamed(Tag.TEST_SCHEDULER);
-container.bind<ISchedulerService>(TYPES.ISchedulerService ).to(SchedulerService);
-container.bind<ILocationService>(TYPES.ILocationService ).to(LocationService).inRequestScope();
-container.bind<IEarthquakeService>(TYPES.IEarthquakeService).to(EarthquakeService).inRequestScope();
+container.bind<ISchedulerService>(TYPES.ISchedulerService ).to(SchedulerService).inSingletonScope();
+container.bind<ILocationService>(TYPES.ILocationService ).to(LocationService).inSingletonScope();
+container.bind<IEarthquakeService>(TYPES.IEarthquakeService).to(EarthquakeService).inSingletonScope();
 container.bind<IEarthquakeQueryProvider>(TYPES.IEarthquakeQueryProvider).to(EarthquakeQueryProvider);
 container.bind<IEarthquakeMapper>(TYPES.IEarthquakeMapper).to(EarthquakeMapper);
 export default container;

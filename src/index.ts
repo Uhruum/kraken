@@ -12,6 +12,9 @@ import process from "process";
 import TYPES from "./types";
 import {ISchedulerService} from "./services/schedulers/abstrations/ISchedulerService";
 import {ILogger} from "./services/logger/abstractions/ILogger";
+import {TagDto} from "./services/schedulers/dtos/TagDto";
+import tags from "./tags";
+import {IScheduler} from "./services/schedulers/abstrations/IScheduler";
 const swaggerDocument = require("./presentation/public/swagger.json");
 
 dotenv.config();
@@ -49,14 +52,3 @@ server.setErrorConfig( (app) => {
 
 let appConfigured = server.build();
 appConfigured.listen(port || 9000, () => console.log("Server is running on port", port));
-
-if(process.env.RunSchedulersAtStart === "true"){
-    const logger = container.get<ILogger>(TYPES.ILogger);
-    const schedulerService = container.get<ISchedulerService>(TYPES.ISchedulerService);
-    schedulerService.startSchedulers().then(r => {
-        if(!r.isErrorThrown)
-            logger.log("INFO",r.message);
-        else
-            logger.log("ERROR",r.error.message);
-    });
-}

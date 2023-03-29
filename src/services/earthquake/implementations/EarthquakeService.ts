@@ -7,7 +7,6 @@ import {IEarthquakeApiService} from "../../emsc/abstractions/IEarthquakeApiServi
 import {ILocationService} from "../../location/abstractions/ILocationService";
 import {Earthquake} from "../../../domain/entities/Earthquake";
 import {Get, Path, Post, Query, Route, Tags} from "tsoa";
-import * as util from "util";
 import {EarthquakeSearchResultDto} from "../dtos/EarthquakeSearchResultDto";
 import {EarthquakeNotFoundError} from "../errors/EarthquakeNotFoundError";
 import {EarthquakePaginatedSearchResultDto} from "../dtos/EarthquakePaginatedSearchResultDto";
@@ -60,7 +59,7 @@ export class EarthquakeService implements IEarthquakeService {
                 this._logger.log("DEBUG", `finished getLocation for earthquake - id: ${id} `);
                 earthquakes.push(earthquake);
             }
-            this._logger.log("DEBUG", `earthquakes for save : ${util.inspect(earthquakes)} `);
+            this._logger.log("DEBUG", `earthquakes for save : ${earthquakes.length} `);
             await queryRunner.manager.save(earthquakes);
             await queryRunner.commitTransaction();
         } catch (e) {

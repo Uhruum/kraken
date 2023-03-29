@@ -8,8 +8,7 @@
     "swagger": "tsoa spec",
     "typeorm": "typeorm-ts-node-esm",
     "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop -d app-data-source.ts",
-    "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync -d app-data-source.ts",
-    "db:reset": "npm run schema:drop && npm run schema:sync",
+    "db:reset": "npm run schema:drop",
     "db:migrate": "npx typeorm-ts-node-esm migration:run -d ./app-data-source.ts"
   },
   "nodemonConfig": {

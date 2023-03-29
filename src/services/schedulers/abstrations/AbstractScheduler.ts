@@ -20,7 +20,8 @@ export abstract class AbstractScheduler implements IScheduler {
     async startScheduler(): Promise<string> {
         this._logger = container.get<ILogger>(TYPES.ILogger);
         this._logger.log("INFO", `Initiate scheduler with name: ${this.getSchedulerName()}`);
-        this._cronJob = new CronJob(this.getCroneExpression(), this.executeScheduler);
+        if (this._cronJob == undefined)
+            this._cronJob = new CronJob(this.getCroneExpression(), this.executeScheduler);
 
         if (!this._cronJob.running) {
             this._cronJob.start();
@@ -49,6 +50,4 @@ export abstract class AbstractScheduler implements IScheduler {
             return `Scheduler already stopped with cron expression: ${this.getCroneExpression()} and name: ${this.getSchedulerName()}`;
         }
     }
-
-    abstract getSchedulerTag(): Tag;
 }

@@ -1,14 +1,12 @@
 import {AbstractScheduler} from "../abstrations/AbstractScheduler";
 import {injectable} from "inversify";
 import * as os from "os";
-import Tag from "../../../tags";
-import {IScheduler} from "../abstrations/IScheduler";
 import container from "../../../inversify.config";
 import {ILogger} from "../../logger/abstractions/ILogger";
 import TYPES from "../../../types";
 
 @injectable()
-export class TestScheduler extends AbstractScheduler implements IScheduler {
+export class TestScheduler extends AbstractScheduler{
 
     constructor() {
         super();
@@ -35,7 +33,4 @@ export class TestScheduler extends AbstractScheduler implements IScheduler {
         return TestScheduler.name;
     }
 
-    override getSchedulerTag(): Tag {
-        return Tag.TEST_SCHEDULER;
-    }
 }
