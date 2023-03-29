@@ -4,7 +4,7 @@ import {inject, injectable} from "inversify";
 import {Get, Route, Tags} from "tsoa";
 import {IEarthquakeApiService} from "../abstractions/IEarthquakeApiService";
 import {EarthquakeInfoDto} from "../dtos/EarthquakeInfoDto";
-import TYPES from "../../../types";
+import TYPES from "../../../compositionRoot/types";
 import {ILogger} from "../../logger/abstractions/ILogger";
 
 @Tags('Earthquake Api Service')

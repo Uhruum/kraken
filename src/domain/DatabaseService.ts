@@ -1,7 +1,7 @@
 import {DataSource} from "typeorm";
 import myDataSource from "../../app-data-source";
 import {inject, injectable} from "inversify";
-import TYPES from "../types";
+import TYPES from "../compositionRoot/types";
 import {ILogger} from "../services/logger/abstractions/ILogger";
 import {IDatabaseService} from "./IDatabaseService";
 

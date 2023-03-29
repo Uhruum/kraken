@@ -2,7 +2,7 @@ import {IEarthquakeQueryProvider} from "../abstractions/IEarthquakeQueryProvider
 import {Brackets, SelectQueryBuilder} from "typeorm";
 import {Earthquake} from "../../../domain/entities/Earthquake";
 import {inject, injectable} from "inversify";
-import TYPES from "../../../types";
+import TYPES from "../../../compositionRoot/types";
 import {IDatabaseService} from "../../../domain/IDatabaseService";
 
 @injectable()

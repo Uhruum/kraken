@@ -1,6 +1,6 @@
 import {controller, httpPost, request, response} from "inversify-express-utils";
 import {inject} from "inversify";
-import TYPES from "../types";
+import TYPES from "../compositionRoot/types";
 import {ISchedulerService} from "../services/schedulers/abstrations/ISchedulerService";
 import * as express from "express";
 import {ILogger} from "../services/logger/abstractions/ILogger";

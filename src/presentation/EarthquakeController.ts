@@ -1,7 +1,7 @@
 import {controller, httpGet, httpPost, queryParam, request, requestParam, response} from "inversify-express-utils";
 import * as express from "express";
 import {inject} from "inversify";
-import TYPES from "../types";
+import TYPES from "../compositionRoot/types";
 import {IEarthquakeService} from "../services/earthquake/abstractions/IEarthquakeService";
 import {ILogger} from "../services/logger/abstractions/ILogger";
 

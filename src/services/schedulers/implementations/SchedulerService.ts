@@ -1,10 +1,10 @@
 import {ISchedulerService} from "../abstrations/ISchedulerService";
 import {IScheduler} from "../abstrations/IScheduler";
 import {inject, injectable, named} from "inversify";
-import TYPES from "../../../types";
-import Tag from "../../../tags";
+import TYPES from "../../../compositionRoot/types";
+import Tag from "../../../compositionRoot/tags";
 import {Body, Post, Route, Tags} from "tsoa";
-import container from "../../../inversify.config";
+import container from "../../../compositionRoot/inversify.config";
 import {TagDto} from "../dtos/TagDto";
 import {SchedulerResultDto} from "../dtos/SchedulerResultDto";
 import process from "process";

@@ -3,18 +3,12 @@ import dotenv from 'dotenv';
 import express from 'express';
 import {InversifyExpressServer} from 'inversify-express-utils';
 import morganBody from 'morgan-body';
-import container from "./inversify.config";
+import container from "./compositionRoot/inversify.config";
 import './presentation/index';
 import swaggerUi from "swagger-ui-express";
 import * as fs from "fs";
 import * as path from "path";
 import process from "process";
-import TYPES from "./types";
-import {ISchedulerService} from "./services/schedulers/abstrations/ISchedulerService";
-import {ILogger} from "./services/logger/abstractions/ILogger";
-import {TagDto} from "./services/schedulers/dtos/TagDto";
-import tags from "./tags";
-import {IScheduler} from "./services/schedulers/abstrations/IScheduler";
 const swaggerDocument = require("./presentation/public/swagger.json");
 
 dotenv.config();
@@ -51,4 +45,7 @@ server.setErrorConfig( (app) => {
 });
 
 let appConfigured = server.build();
-appConfigured.listen(port || 9000, () => console.log("Server is running on port", port));
+appConfigured.listen(port || 8000, () => {
+    console.log(`Server is running on: ${port}!`);
+    console.log(`Api documentation is on http://localhost:${port}/api/docs/`);
+});

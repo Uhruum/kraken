@@ -1,6 +1,10 @@
 import {Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn, UpdateDateColumn} from "typeorm";
 import {Location} from "./Location";
 
+/**
+ * Represents basic information about
+ * earthquake.
+ */
 @Entity()
 export class Earthquake{
 

@@ -1,6 +1,6 @@
 import {controller, httpGet, interfaces, requestParam, response} from "inversify-express-utils";
 import {inject} from "inversify";
-import TYPES from "../types";
+import TYPES from "../compositionRoot/types";
 import * as express from "express";
 import {IReverseGeocodingService} from "../services/reverseGeocoding/abstractions/IReverseGeocodingService";
 import {ILogger} from "../services/logger/abstractions/ILogger";

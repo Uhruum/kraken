@@ -1,6 +1,6 @@
 import {ILocationService} from "../abstractions/ILocationService";
 import {inject, injectable} from "inversify";
-import TYPES from "../../../types";
+import TYPES from "../../../compositionRoot/types";
 import {IReverseGeocodingService} from "../../reverseGeocoding/abstractions/IReverseGeocodingService";
 import {IDatabaseService} from "../../../domain/IDatabaseService";
 import {ILogger} from "../../logger/abstractions/ILogger";

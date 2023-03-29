@@ -1,3 +1,6 @@
+/**
+ * Represents response from reverse geocoding service
+ */
 export class LocationDto{
     latitude:number;
     longitude:number;

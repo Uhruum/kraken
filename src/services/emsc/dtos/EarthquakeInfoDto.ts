@@ -1,3 +1,6 @@
+/**
+ * Represents result of parsed row from esmc rss feed
+ */
 export class EarthquakeInfoDto{
   title: string
   lat: number

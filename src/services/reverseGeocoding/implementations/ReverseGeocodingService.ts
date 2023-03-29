@@ -3,7 +3,7 @@ import {LocationDto} from "../dtos/LocationDto";
 import axios, { AxiosError } from "axios";
 import {Get, Path, Route, Tags} from "tsoa";
 import {inject, injectable} from "inversify";
-import TYPES from "../../../types";
+import TYPES from "../../../compositionRoot/types";
 import {ILogger} from "../../logger/abstractions/ILogger";
 
 @Tags('Reverse Geocoding Service')

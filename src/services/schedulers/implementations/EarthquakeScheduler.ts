@@ -1,10 +1,10 @@
 import {AbstractScheduler} from "../abstrations/AbstractScheduler";
 import { injectable} from "inversify";
-import TYPES from "../../../types";
+import TYPES from "../../../compositionRoot/types";
 import {IScheduler} from "../abstrations/IScheduler";
 import {ILogger} from "../../logger/abstractions/ILogger";
 import {IEarthquakeService} from "../../earthquake/abstractions/IEarthquakeService";
-import container from "../../../inversify.config";
+import container from "../../../compositionRoot/inversify.config";
 
 @injectable()
 export class EarthquakeScheduler extends AbstractScheduler implements IScheduler {

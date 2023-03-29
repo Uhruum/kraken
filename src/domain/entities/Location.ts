@@ -9,6 +9,11 @@ import {
 } from "typeorm";
 import {Earthquake} from "./Earthquake";
 
+/**
+ * Represents basic information about
+ * physical address/location previously
+ * devastated by earthquake.
+ */
 @Entity()
 export class Location{
 

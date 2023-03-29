@@ -1,9 +1,9 @@
 import {AbstractScheduler} from "../abstrations/AbstractScheduler";
 import {injectable} from "inversify";
 import * as os from "os";
-import container from "../../../inversify.config";
+import container from "../../../compositionRoot/inversify.config";
 import {ILogger} from "../../logger/abstractions/ILogger";
-import TYPES from "../../../types";
+import TYPES from "../../../compositionRoot/types";
 
 @injectable()
 export class TestScheduler extends AbstractScheduler{

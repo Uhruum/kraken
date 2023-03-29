@@ -7,6 +7,7 @@
 		"responses": {},
 		"schemas": {
 			"EarthquakeInfoDto": {
+				"description": "Represents result of parsed row from esmc rss feed",
 				"properties": {
 					"title": {
 						"type": "string"
@@ -42,6 +43,7 @@
 				"additionalProperties": false
 			},
 			"LocationDto": {
+				"description": "Represents response from reverse geocoding service",
 				"properties": {
 					"latitude": {
 						"type": "number",
@@ -91,6 +93,7 @@
 				"additionalProperties": false
 			},
 			"SchedulerResultDto": {
+				"description": "Represents result of scheduler service action",
 				"properties": {
 					"message": {
 						"type": "string"
@@ -130,6 +133,7 @@
 				"additionalProperties": false
 			},
 			"EarthquakeSearchResultDto": {
+				"description": "Data transfer object which represents\r\nresult of filtering specific earthquake",
 				"properties": {
 					"id": {
 						"type": "number",
@@ -173,6 +177,7 @@
 				"additionalProperties": false
 			},
 			"EarthquakePaginatedSearchResultDto": {
+				"description": "Data transfer object which represents\r\nresult of filtering earthquakes by specific parameters.",
 				"properties": {
 					"data": {
 						"items": {

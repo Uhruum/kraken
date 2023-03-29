@@ -1,6 +1,6 @@
 import {IEarthquakeService} from "../abstractions/IEarthquakeService";
 import {inject, injectable} from "inversify";
-import TYPES from "../../../types";
+import TYPES from "../../../compositionRoot/types";
 import {IDatabaseService} from "../../../domain/IDatabaseService";
 import {ILogger} from "../../logger/abstractions/ILogger";
 import {IEarthquakeApiService} from "../../emsc/abstractions/IEarthquakeApiService";

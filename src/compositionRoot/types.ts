@@ -1,8 +1,8 @@
-import {IReverseGeocodingService} from "./services/reverseGeocoding/abstractions/IReverseGeocodingService";
-import {IScheduler} from "./services/schedulers/abstrations/IScheduler";
-import {IEarthquakeService} from "./services/earthquake/abstractions/IEarthquakeService";
-import {IEarthquakeQueryProvider} from "./services/earthquake/abstractions/IEarthquakeQueryProvider";
-import {IEarthquakeMapper} from "./services/earthquake/abstractions/IEarthquakeMapper";
+import {IReverseGeocodingService} from "../services/reverseGeocoding/abstractions/IReverseGeocodingService";
+import {IScheduler} from "../services/schedulers/abstrations/IScheduler";
+import {IEarthquakeService} from "../services/earthquake/abstractions/IEarthquakeService";
+import {IEarthquakeQueryProvider} from "../services/earthquake/abstractions/IEarthquakeQueryProvider";
+import {IEarthquakeMapper} from "../services/earthquake/abstractions/IEarthquakeMapper";
 
 let TYPES = {
   ILogger:Symbol("ILogger"),

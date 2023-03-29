@@ -2,7 +2,7 @@ import * as express from 'express';
 import {inject} from 'inversify';
 import {interfaces, controller, httpGet, request, response} from "inversify-express-utils";
 import {IEarthquakeApiService} from '../services/emsc/abstractions/IEarthquakeApiService';
-import TYPES from '../types';
+import TYPES from '../compositionRoot/types';
 import {ILogger} from "../services/logger/abstractions/ILogger";
 
 @controller("/emsc")

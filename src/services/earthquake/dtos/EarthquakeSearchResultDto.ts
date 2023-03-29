@@ -1,3 +1,7 @@
+/**
+ * Data transfer object which represents
+ * result of filtering specific earthquake
+ */
 export class EarthquakeSearchResultDto {
     id: number
     title: string
