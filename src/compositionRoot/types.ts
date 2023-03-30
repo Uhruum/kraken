@@ -3,6 +3,7 @@ import {IScheduler} from "../services/schedulers/abstrations/IScheduler";
 import {IEarthquakeService} from "../services/earthquake/abstractions/IEarthquakeService";
 import {IEarthquakeQueryProvider} from "../services/earthquake/abstractions/IEarthquakeQueryProvider";
 import {IEarthquakeMapper} from "../services/earthquake/abstractions/IEarthquakeMapper";
+import {ILocationMapper} from "../services/location/abstractions/ILocationMapper";
 
 let TYPES = {
   ILogger:Symbol("ILogger"),
@@ -14,7 +15,8 @@ let TYPES = {
   ILocationService: Symbol("ILocationService"),
   IEarthquakeService: Symbol("IEarthquakeService"),
   IEarthquakeQueryProvider: Symbol("IEarthquakeQueryProvider"),
-  IEarthquakeMapper: Symbol("IEarthquakeMapper")
+  IEarthquakeMapper: Symbol("IEarthquakeMapper"),
+  ILocationMapper: Symbol("ILocationMapper")
 };
 
 export default TYPES;

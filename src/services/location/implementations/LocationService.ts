@@ -5,13 +5,15 @@ import {IReverseGeocodingService} from "../../reverseGeocoding/abstractions/IRev
 import {IDatabaseService} from "../../../domain/IDatabaseService";
 import {ILogger} from "../../logger/abstractions/ILogger";
 import {Location} from "../../../domain/entities/Location";
+import {ILocationMapper} from "../abstractions/ILocationMapper";
 
 @injectable()
 export class LocationService implements ILocationService {
 
     constructor(@inject(TYPES.IReverseGeocodingService) private readonly _reverseGeocodingService: IReverseGeocodingService,
                 @inject(TYPES.IDatabaseService) private readonly _database: IDatabaseService,
-                @inject(TYPES.ILogger) private readonly _logger: ILogger) {
+                @inject(TYPES.ILogger) private readonly _logger: ILogger,
+                @inject(TYPES.ILocationMapper) private readonly _locationMapper: ILocationMapper) {
     }
 
     public async getLocation(latitude: number, longitude: number): Promise<Location> {
@@ -22,17 +24,8 @@ export class LocationService implements ILocationService {
         try {
             this._logger.log("INFO", `getLocation for earthquake - latitude: ${latitude}, latitude: ${longitude} `);
             let location = await queryRunner.manager.findOneBy(Location, {latitude: latitude, longitude: longitude});
-            if (location !== null)
-                return location;
             const locationDto = await this._reverseGeocodingService.getLocationInfo(longitude, latitude);
-
-            location = new Location();
-            location.country = locationDto.countryName;
-            location.countryCode = locationDto.countryCode;
-            location.latitude = locationDto.latitude;
-            location.longitude = locationDto.longitude;
-            location.city = locationDto.city;
-
+            location =this._locationMapper.mapLocationDtoToLocation(locationDto,location);
             const newLocation = await queryRunner.manager.save(location);
             await queryRunner.commitTransaction();
             this._logger.log("INFO", `Location saved - latitude: ${latitude}, latitude: ${longitude} `);

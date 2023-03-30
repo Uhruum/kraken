@@ -22,6 +22,8 @@ import {IEarthquakeQueryProvider} from "../services/earthquake/abstractions/IEar
 import {EarthquakeQueryProvider} from "../services/earthquake/implementations/EarthquakeQueryProvider";
 import {IEarthquakeMapper} from "../services/earthquake/abstractions/IEarthquakeMapper";
 import {EarthquakeMapper} from "../services/earthquake/implementations/EarthquakeMapper";
+import {ILocationMapper} from "../services/location/abstractions/ILocationMapper";
+import {LocationMapper} from "../services/location/implementations/LocationMapper";
 
 let container = new Container();
 container.bind<ILogger>(TYPES.ILogger).to(Logger).inSingletonScope();
@@ -35,4 +37,5 @@ container.bind<ILocationService>(TYPES.ILocationService ).to(LocationService).in
 container.bind<IEarthquakeService>(TYPES.IEarthquakeService).to(EarthquakeService).inSingletonScope();
 container.bind<IEarthquakeQueryProvider>(TYPES.IEarthquakeQueryProvider).to(EarthquakeQueryProvider);
 container.bind<IEarthquakeMapper>(TYPES.IEarthquakeMapper).to(EarthquakeMapper);
+container.bind<ILocationMapper>(TYPES.ILocationMapper).to(LocationMapper);
 export default container;

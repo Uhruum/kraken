@@ -41,22 +41,9 @@ export class EarthquakeService implements IEarthquakeService {
 
                 const id = Number(earthquakeDto.link.split("?id=")[1]);
                 const magnitude = Number(earthquakeDto.magnitude.split(" ")[1]);
-                let earthquake = await queryRunner.manager.findOne(Earthquake,
-                    {
-                        where: {id: id},
-                        relations: {location: true}
-                    });
-
-                if (earthquake === null)
-                    earthquake = new Earthquake();
-
-                earthquake.id = id;
-                earthquake.title = earthquakeDto.title;
-                earthquake.time = earthquakeDto.time;
-                earthquake.magnitude = magnitude;
-                this._logger.log("DEBUG", `getLocation for earthquake - id: ${id} `);
-                earthquake.location = await this._locationService.getLocation(earthquakeDto.lat, earthquakeDto.long);
-                this._logger.log("DEBUG", `finished getLocation for earthquake - id: ${id} `);
+                const location = await this._locationService.getLocation(earthquakeDto.lat, earthquakeDto.long);
+                let earthquake = await queryRunner.manager.findOne(Earthquake, {where: {id: id}, relations: {location: true}});
+                earthquake = this._earthquakeMapper.mapEarthquakeInfoDtoToEarthquake(earthquakeDto,id,magnitude,location,earthquake);
                 earthquakes.push(earthquake);
             }
             this._logger.log("DEBUG", `earthquakes for save : ${earthquakes.length} `);
