@@ -9,6 +9,7 @@ import swaggerUi from "swagger-ui-express";
 import * as fs from "fs";
 import * as path from "path";
 import process from "process";
+import cors from "cors";
 const swaggerDocument = require("./presentation/public/swagger.json");
 
 dotenv.config();
@@ -28,7 +29,9 @@ morganBody(app, {
 let server =  new InversifyExpressServer(container, null, { rootPath: "/api" }, app);
 server.setConfig((app) => {
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   app.use(express.static("/src/presentation/public"));
+  app.use(cors());
   app.use(
     "/api/docs",
     swaggerUi.serve,
