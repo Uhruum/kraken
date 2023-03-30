@@ -26,6 +26,7 @@ export class Earthquake{
     @UpdateDateColumn()
     updatedDate:Date
 
-    @ManyToOne(() => Location, (location) => location.earthquakes)
+    @ManyToOne(() => Location, (location) => location.earthquakes,{
+    cascade: true, onUpdate: 'CASCADE'})
     location: Location;
 }

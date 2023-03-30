@@ -18,25 +18,16 @@ export class LocationService implements ILocationService {
 
     public async getLocation(latitude: number, longitude: number): Promise<Location> {
         const datasource = await this._database.getDataSource();
-        const queryRunner = datasource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
+        const locationRepository = datasource.getRepository(Location);
         try {
             this._logger.log("INFO", `getLocation for earthquake - latitude: ${latitude}, latitude: ${longitude} `);
-            let location = await queryRunner.manager.findOneBy(Location, {latitude: latitude, longitude: longitude});
+            let location = await locationRepository.findOneBy({latitude: latitude, longitude: longitude});
             const locationDto = await this._reverseGeocodingService.getLocationInfo(longitude, latitude);
-            location =this._locationMapper.mapLocationDtoToLocation(locationDto,location);
-            const newLocation = await queryRunner.manager.save(location);
-            await queryRunner.commitTransaction();
-            this._logger.log("INFO", `Location saved - latitude: ${latitude}, latitude: ${longitude} `);
-            return newLocation;
+            return this._locationMapper.mapLocationDtoToLocation(locationDto,location);
         } catch (e) {
             const error = e as Error;
             this._logger.log("ERROR", `msg: ${error.message} \nstackTrace: ${error.stack}`);
-            await queryRunner.rollbackTransaction();
             throw  error;
-        } finally {
-            await queryRunner.release();
         }
     }
 }

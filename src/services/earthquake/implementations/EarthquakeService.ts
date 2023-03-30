@@ -12,6 +12,7 @@ import {EarthquakeNotFoundError} from "../errors/EarthquakeNotFoundError";
 import {EarthquakePaginatedSearchResultDto} from "../dtos/EarthquakePaginatedSearchResultDto";
 import {IEarthquakeQueryProvider} from "../abstractions/IEarthquakeQueryProvider";
 import {IEarthquakeMapper} from "../abstractions/IEarthquakeMapper";
+import * as util from "util";
 
 @Tags('Earthquake Service')
 @Route("/api/earthquake")
@@ -46,7 +47,7 @@ export class EarthquakeService implements IEarthquakeService {
                 earthquake = this._earthquakeMapper.mapEarthquakeInfoDtoToEarthquake(earthquakeDto,id,magnitude,location,earthquake);
                 earthquakes.push(earthquake);
             }
-            this._logger.log("DEBUG", `earthquakes for save : ${earthquakes.length} `);
+            this._logger.log("DEBUG", `earthquakes for save : ${util.inspect(earthquakes)} `);
             await queryRunner.manager.save(earthquakes);
             await queryRunner.commitTransaction();
         } catch (e) {

@@ -17,10 +17,13 @@ import {Earthquake} from "./Earthquake";
 @Entity()
 export class Location{
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn("uuid")
+    id: string
+
+    @Column()
     latitude: number
 
-    @PrimaryColumn()
+    @Column()
     longitude: number
 
     @Column({ nullable: true })
